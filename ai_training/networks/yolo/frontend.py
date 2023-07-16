@@ -8,14 +8,14 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 
-from axelerate.networks.common_utils.fit import train
-from axelerate.networks.yolo.backend.decoder import YoloDecoder
-from axelerate.networks.yolo.backend.utils.custom import Yolo_Precision, Yolo_Recall
-from axelerate.networks.yolo.backend.loss import create_loss_fn, Params
-from axelerate.networks.yolo.backend.network import create_yolo_network
-from axelerate.networks.yolo.backend.batch_gen import create_batch_generator
-from axelerate.networks.yolo.backend.utils.annotation import get_train_annotations, get_unique_labels
-from axelerate.networks.yolo.backend.utils.box import to_minmax
+from ai_training.networks.common_utils.fit import train
+from ai_training.networks.yolo.backend.decoder import YoloDecoder
+from ai_training.networks.yolo.backend.utils.custom import Yolo_Precision, Yolo_Recall
+from ai_training.networks.yolo.backend.loss import create_loss_fn, Params
+from ai_training.networks.yolo.backend.network import create_yolo_network
+from ai_training.networks.yolo.backend.batch_gen import create_batch_generator
+from ai_training.networks.yolo.backend.utils.annotation import get_train_annotations, get_unique_labels
+from ai_training.networks.yolo.backend.utils.box import to_minmax
 
 def get_object_labels(ann_directory):
     files = os.listdir(ann_directory)

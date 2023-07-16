@@ -9,9 +9,9 @@ np.set_printoptions(threshold=np.inf)
 from tqdm import tqdm
 from tensorflow.keras.models import load_model
 
-from axelerate.networks.segnet.train import find_latest_checkpoint
-from axelerate.networks.segnet.data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors, get_pairs_from_paths
-from axelerate.networks.segnet.models.config import IMAGE_ORDERING
+from ai_training.networks.segnet.train import find_latest_checkpoint
+from ai_training.networks.segnet.data_utils.data_loader import get_image_array, get_segmentation_array, DATA_LOADER_SEED, class_colors, get_pairs_from_paths
+from ai_training.networks.segnet.models.config import IMAGE_ORDERING
 from . import metrics
 import six
 

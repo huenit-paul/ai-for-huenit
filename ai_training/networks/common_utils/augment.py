@@ -168,7 +168,7 @@ def _create_augment_pipeline():
 def visualize_detection_dataset(img_folder, ann_folder, num_imgs = None, img_size=None, augment=None):
     import matplotlib.pyplot as plt
     import matplotlib
-    from axelerate.networks.yolo.backend.utils.annotation import PascalVocXmlParser
+    from ai_training.networks.yolo.backend.utils.annotation import PascalVocXmlParser
     try:
         matplotlib.use('TkAgg')
     except:
@@ -202,7 +202,7 @@ def visualize_detection_dataset(img_folder, ann_folder, num_imgs = None, img_siz
 def visualize_segmentation_dataset(images_path, segs_path, num_imgs = None, img_size=None, augment=False, n_classes=255):
     import matplotlib.pyplot as plt
     import matplotlib
-    from axelerate.networks.segnet.data_utils.data_loader import get_pairs_from_paths, DATA_LOADER_SEED, class_colors, DataLoaderError
+    from ai_training.networks.segnet.data_utils.data_loader import get_pairs_from_paths, DATA_LOADER_SEED, class_colors, DataLoaderError
 
     try:
         matplotlib.use('TkAgg')

@@ -3,8 +3,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Reshape, Conv2D, UpSampling2D, Concatenate, ZeroPadding2D
-from axelerate.networks.common_utils.feature import create_feature_extractor
-from axelerate.networks.common_utils.mobilenet_sipeed.mobilenet import _depthwise_conv_block, _conv_block
+from ai_training.networks.common_utils.feature import create_feature_extractor
+from ai_training.networks.common_utils.mobilenet_sipeed.mobilenet import _depthwise_conv_block, _conv_block
 
 def create_yolo_network(architecture,
                         input_size,

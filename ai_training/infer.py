@@ -11,11 +11,11 @@ import matplotlib.image as mpimg
 from tensorflow.keras import backend as K 
 
 from tensorflow.keras import backend as K 
-from axelerate.networks.yolo.frontend import create_yolo
-from axelerate.networks.yolo.backend.utils.box import draw_boxes
-from axelerate.networks.segnet.frontend_segnet import create_segnet
-from axelerate.networks.segnet.predict import visualize_segmentation
-from axelerate.networks.classifier.frontend_classifier import get_labels, create_classifier
+from ai_training.networks.yolo.frontend import create_yolo
+from ai_training.networks.yolo.backend.utils.box import draw_boxes
+from ai_training.networks.segnet.frontend_segnet import create_segnet
+from ai_training.networks.segnet.predict import visualize_segmentation
+from ai_training.networks.classifier.frontend_classifier import get_labels, create_classifier
 
 K.clear_session()
     

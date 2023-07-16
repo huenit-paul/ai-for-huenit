@@ -9,12 +9,12 @@ import matplotlib.image as mpimg
 
 from tensorflow.keras import backend as K 
 
-from axelerate.networks.yolo.frontend import create_yolo
-from axelerate.networks.yolo.backend.utils.box import draw_boxes
-from axelerate.networks.yolo.backend.utils.annotation import parse_annotation
-from axelerate.networks.yolo.backend.utils.eval.fscore import count_true_positives, calc_score
-from axelerate.networks.segnet.frontend_segnet import create_segnet
-from axelerate.networks.classifier.frontend_classifier import get_labels, create_classifier
+from ai_training.networks.yolo.frontend import create_yolo
+from ai_training.networks.yolo.backend.utils.box import draw_boxes
+from ai_training.networks.yolo.backend.utils.annotation import parse_annotation
+from ai_training.networks.yolo.backend.utils.eval.fscore import count_true_positives, calc_score
+from ai_training.networks.segnet.frontend_segnet import create_segnet
+from ai_training.networks.classifier.frontend_classifier import get_labels, create_classifier
 
 K.clear_session()
 

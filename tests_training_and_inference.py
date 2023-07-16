@@ -1,6 +1,6 @@
 import argparse
 import json
-from axelerate import setup_training, setup_evaluation
+from ai_training import setup_training, setup_evaluation
 import tensorflow.keras.backend as K
 from termcolor import colored
 import traceback

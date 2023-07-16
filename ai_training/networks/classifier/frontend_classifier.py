@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
-from axelerate.networks.common_utils.feature import create_feature_extractor
-from axelerate.networks.classifier.batch_gen import create_datagen
-from axelerate.networks.common_utils.fit import train
+from ai_training.networks.common_utils.feature import create_feature_extractor
+from ai_training.networks.classifier.batch_gen import create_datagen
+from ai_training.networks.common_utils.fit import train
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.applications.mobilenet import preprocess_input

@@ -4,7 +4,7 @@
 """Utilities for real-time data augmentation on image data. """
 
 from .directory_iterator import DirectoryIterator
-from axelerate.networks.common_utils.augment import process_image_classification
+from ai_training.networks.common_utils.augment import process_image_classification
 from tensorflow.keras.utils import Sequence
 import cv2
 import os

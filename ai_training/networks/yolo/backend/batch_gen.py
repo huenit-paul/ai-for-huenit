@@ -4,9 +4,9 @@ import numpy as np
 np.random.seed(1337)
 
 from tensorflow.keras.utils import Sequence
-from axelerate.networks.common_utils.augment import ImgAugment
-from axelerate.networks.yolo.backend.utils.box import to_centroid, create_anchor_boxes, find_match_box
-from axelerate.networks.common_utils.fit import train
+from ai_training.networks.common_utils.augment import ImgAugment
+from ai_training.networks.yolo.backend.utils.box import to_centroid, create_anchor_boxes, find_match_box
+from ai_training.networks.common_utils.fit import train
 
 
 def create_batch_generator(annotations, 

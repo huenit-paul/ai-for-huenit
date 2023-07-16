@@ -77,7 +77,7 @@ class Converter(object):
     def edgetpu_dataset_gen(self):
         num_imgs = 300
         image_files_list = []
-        from axelerate.networks.common_utils.feature import create_feature_extractor
+        from ai_training.networks.common_utils.feature import create_feature_extractor
         backend = create_feature_extractor(self._backend, [self._img_size[0], self._img_size[1]])
         image_search = lambda ext : glob.glob(self._dataset_path + ext, recursive=True)
         for ext in ['/**/*.jpg', '/**/*.jpeg', '/**/*.png']: image_files_list.extend(image_search(ext))
@@ -93,7 +93,7 @@ class Converter(object):
     def k210_dataset_gen(self):
         num_imgs = 300
         image_files_list = []
-        from axelerate.networks.common_utils.feature import create_feature_extractor
+        from ai_training.networks.common_utils.feature import create_feature_extractor
         backend = create_feature_extractor(self._backend, [self._img_size[0], self._img_size[1]])
         image_search = lambda ext : glob.glob(self._dataset_path + ext, recursive=True)
         for ext in ['/**/*.jpg', '/**/*.jpeg', '/**/*.png']: image_files_list.extend(image_search(ext))

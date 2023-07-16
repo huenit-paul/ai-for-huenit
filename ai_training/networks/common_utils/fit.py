@@ -5,8 +5,8 @@ import tensorflow as tf
 import numpy as np
 import warnings
 
-from axelerate.networks.common_utils.callbacks import WarmUpCosineDecayScheduler
-from axelerate.networks.yolo.backend.utils.custom import MergeMetrics
+from ai_training.networks.common_utils.callbacks import WarmUpCosineDecayScheduler
+from ai_training.networks.yolo.backend.utils.custom import MergeMetrics
 from tensorflow.keras.optimizers import Adam, SGD
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from datetime import datetime

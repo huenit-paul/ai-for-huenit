@@ -8,10 +8,10 @@ import sys
 import json
 import matplotlib
 
-from axelerate.networks.yolo.frontend import create_yolo, get_object_labels
-from axelerate.networks.classifier.frontend_classifier import create_classifier, get_labels
-from axelerate.networks.segnet.frontend_segnet import create_segnet
-from axelerate.networks.common_utils.convert import Converter
+from ai_training.networks.yolo.frontend import create_yolo, get_object_labels
+from ai_training.networks.classifier.frontend_classifier import create_classifier, get_labels
+from ai_training.networks.segnet.frontend_segnet import create_segnet
+from ai_training.networks.common_utils.convert import Converter
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 import tensorflow as tf

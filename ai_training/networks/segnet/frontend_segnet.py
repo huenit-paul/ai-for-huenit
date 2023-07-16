@@ -4,10 +4,10 @@ import cv2
 import time
 from tqdm import tqdm
 
-from axelerate.networks.segnet.data_utils.data_loader import create_batch_generator, verify_segmentation_dataset
-from axelerate.networks.common_utils.feature import create_feature_extractor
-from axelerate.networks.common_utils.fit import train
-from axelerate.networks.segnet.models.segnet import mobilenet_segnet, squeezenet_segnet, full_yolo_segnet, tiny_yolo_segnet, nasnetmobile_segnet, resnet50_segnet, densenet121_segnet
+from ai_training.networks.segnet.data_utils.data_loader import create_batch_generator, verify_segmentation_dataset
+from ai_training.networks.common_utils.feature import create_feature_extractor
+from ai_training.networks.common_utils.fit import train
+from ai_training.networks.segnet.models.segnet import mobilenet_segnet, squeezenet_segnet, full_yolo_segnet, tiny_yolo_segnet, nasnetmobile_segnet, resnet50_segnet, densenet121_segnet
 
 def masked_categorical_crossentropy(gt , pr ):
     from tensorflow.keras.losses import categorical_crossentropy

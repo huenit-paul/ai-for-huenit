@@ -5,7 +5,7 @@ from tensorflow.keras.layers import *
 
 from .config import IMAGE_ORDERING
 from .model_utils import get_segmentation_model
-from axelerate.networks.common_utils.feature import create_feature_extractor
+from ai_training.networks.common_utils.feature import create_feature_extractor
 
 mobilenet = {1:10,2:23,3:36,4:73,5:86}
 densenet121 = {1:8,2:50,3:138,4:310,5:426}
