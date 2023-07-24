@@ -93,8 +93,8 @@ def train_from_config(config,project_folder):
                                                config["train"]["batch_size"],
                                                config["train"]["augmentation"],
                                                config['train']['learning_rate'], 
-                                               config['train']['train_times'],
-                                               config['train']['valid_times'],
+                                            #    config['train']['train_times'],
+                                            #    config['train']['valid_times'],
                                                config['train']['valid_image_folder'],
                                                config['train']['first_trainable_layer'],
                                                config['train']['valid_metric'])

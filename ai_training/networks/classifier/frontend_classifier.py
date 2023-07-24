@@ -104,8 +104,8 @@ class Classifier(object):
               batch_size = 8,
               augumentation = False,
               learning_rate = 1e-4, 
-              train_times = 1,
-              valid_times = 1,
+            #   train_times = 1,
+            #   valid_times = 1,
               valid_img_folder = "",
               first_trainable_layer = None,
               metrics = "val_loss"):
