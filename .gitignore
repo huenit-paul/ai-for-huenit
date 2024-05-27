@@ -13,3 +13,7 @@ logs/
 *.txt
 *.pyc
 .vscode/
+*.jpg
+*.mp4
+*.xml
+my_test/
