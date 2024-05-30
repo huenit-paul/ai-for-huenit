@@ -13,3 +13,5 @@ logs/
 *.txt
 *.pyc
 .vscode/
+*.jpg
+*.Ds_Store
