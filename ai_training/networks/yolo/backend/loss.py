@@ -283,24 +283,27 @@ def create_loss_fn(params, layer, batch_size):
         coord_weight = 2 - all_true_wh[..., 0:1] * all_true_wh[..., 1:2]
 
         xy_loss = tf.reduce_sum(
-            obj_mask * coord_weight * tf.nn.sigmoid_cross_entropy_with_logits(
-                labels=grid_true_xy, logits=grid_pred_xy)) / params.batch_size
+            obj_mask * coord_weight * tf.square(grid_true_xy - tf.sigmoid(grid_pred_xy))
+        ) / params.batch_size
 
         wh_loss = tf.reduce_sum(
-            obj_mask * coord_weight * params.wh_weight * tf.square(tf.subtract(
-                x=grid_true_wh, y=grid_pred_wh))) / params.batch_size
+            obj_mask * coord_weight * params.wh_weight * tf.square(grid_true_wh - grid_pred_wh)
+        ) / params.batch_size
 
         obj_loss = params.obj_weight * tf.reduce_sum(
             obj_mask * tf.nn.sigmoid_cross_entropy_with_logits(
-                labels=true_confidence, logits=pred_confidence)) / params.batch_size
+                labels=true_confidence, logits=pred_confidence)
+        ) / params.batch_size
 
         noobj_loss = params.noobj_weight * tf.reduce_sum(
             (1 - obj_mask) * ignore_mask * tf.nn.sigmoid_cross_entropy_with_logits(
-                labels=true_confidence, logits=pred_confidence)) / params.batch_size
+                labels=true_confidence, logits=pred_confidence)
+        ) / params.batch_size
 
         cls_loss = tf.reduce_sum(
             obj_mask * tf.nn.sigmoid_cross_entropy_with_logits(
-                labels=true_cls, logits=pred_cls)) / params.batch_size
+                labels=true_cls, logits=pred_cls)
+        ) / params.batch_size
 
         total_loss = obj_loss + noobj_loss + cls_loss + xy_loss + wh_loss
 
