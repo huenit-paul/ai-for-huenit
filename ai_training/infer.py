@@ -165,7 +165,7 @@ def setup_inference(config, weights, threshold = None, folder = None):
             prediction_time, boxes, scores = yolo.predict(input_image, height, width, float(threshold))
             classes = np.argmax(scores, axis=1) if len(scores) > 0 else []
             print(classes)
-            temp = ["person", "bird", "cat", "cow", "dog", "horse", "sheep", "aeroplane", "bicycle", "boat", "bus", "car", "motorbike", "train","bottle", "chair", "diningtable", "pottedplant", "sofa", "tvmonitor"]
+            temp = config['model']['labels']
             if len(classes) > 0:
                 for i in range(len(classes)):
                     print(temp[classes[i]])
