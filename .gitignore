@@ -17,3 +17,4 @@ logs/
 *.mp4
 *.xml
 my_test/
+*.bin
