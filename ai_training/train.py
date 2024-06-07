@@ -156,6 +156,9 @@ def train_from_config(config,project_folder):
             # only for 1 detection layer (If want to use more than double layer, TODO - logic modifcation)
             target_layer = "detection_layer_1"
             target_output_shape = target_model.get_layer(name=target_layer).output_shape
+            target_output_shape = list(target_output_shape)
+            target_output_shape[0] = 0
+            target_output_shape = tuple(target_output_shape)
             
             anchors_list = config['model']['anchors']
             flattened_list = [item for sublist in anchors_list for pair in sublist for item in pair]
@@ -164,6 +167,8 @@ def train_from_config(config,project_folder):
             generate_script(target_path = target_path, 
                         classes = config['model']['labels'],
                         anchors = anchors,
+                        obj_thresh= config['model']['obj_thresh'],
+                        iou_thresh= config['model']['iou_thresh'],
                         set_outputs = target_output_shape)
         
     return model_path

@@ -1,4 +1,4 @@
-def generate_script(target_path, classes, anchors, set_outputs):
+def generate_script(target_path, classes, anchors, obj_thresh, iou_thresh, set_outputs):
     classes_str = ", ".join([f'"{cls}"' for cls in classes])
     anchors_str = ", ".join(map(str, anchors))
     set_outputs_str = ", ".join(map(str, set_outputs))
@@ -24,7 +24,7 @@ task = kpu.load(0x500000)
 
 anchors = ({anchors_str})
 
-a = kpu.init_yolo2(task, 0.8, 0.5, 5, anchors)
+a = kpu.init_yolo2(task, {obj_thresh}, {iou_thresh}, 5, anchors)
 a = kpu.set_outputs(task, {set_outputs_str})
 
 while True:
