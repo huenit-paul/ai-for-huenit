@@ -15,3 +15,7 @@ logs/
 .vscode/
 *.jpg
 *.Ds_Store
+*.mp4
+*.xml
+my_test/
+*.bin
