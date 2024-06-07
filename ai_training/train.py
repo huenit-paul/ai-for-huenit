@@ -12,6 +12,7 @@ from ai_training.networks.yolo.frontend import create_yolo, get_object_labels
 from ai_training.networks.classifier.frontend_classifier import create_classifier, get_labels
 from ai_training.networks.segnet.frontend_segnet import create_segnet
 from ai_training.networks.common_utils.convert import Converter
+from ai_training.generate_detector_script import generate_script
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '4'
 import tensorflow as tf
@@ -144,6 +145,27 @@ def train_from_config(config,project_folder):
     # 4 Convert the model
     time.sleep(2)
     converter.convert_model(model_path)
+    
+    # 5 Make script for yolo (if config['train']['generate_script'] exist and True)
+    if 'generate_script' in config['train']:
+        if config['train']['generate_script']:
+            time.sleep(1)
+            target_path = os.path.dirname(model_path)
+            import tensorflow as tf
+            target_model = tf.keras.models.load_model(model_path)
+            # only for 1 detection layer (If want to use more than double layer, TODO - logic modifcation)
+            target_layer = "detection_layer_1"
+            target_output_shape = target_model.get_layer(name=target_layer).output_shape
+            
+            anchors_list = config['model']['anchors']
+            flattened_list = [item for sublist in anchors_list for pair in sublist for item in pair]
+            anchors = tuple(flattened_list)
+            
+            generate_script(target_path = target_path, 
+                        classes = config['model']['labels'],
+                        anchors = anchors,
+                        set_outputs = target_output_shape)
+        
     return model_path
 
 def setup_training(config_file=None, config_dict=None):
