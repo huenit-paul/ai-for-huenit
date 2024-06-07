@@ -72,7 +72,7 @@ class Converter(object):
                 
         self._converter_type = converter_type
         self._backend = backend
-        self._dataset_path=dataset_path
+        self._dataset_path= dataset_path
 
     def edgetpu_dataset_gen(self):
         num_imgs = 300
@@ -90,26 +90,51 @@ class Converter(object):
             data = np.expand_dims(data, 0)
             yield [data]
 
-    def k210_dataset_gen(self):
+    def k210_dataset_gen(self, extensions=['.jpg', '.jpeg', '.png']):
         num_imgs = 300
         image_files_list = []
         from ai_training.networks.common_utils.feature import create_feature_extractor
         backend = create_feature_extractor(self._backend, [self._img_size[0], self._img_size[1]])
-        image_search = lambda ext : glob.glob(self._dataset_path + ext, recursive=True)
-        for ext in ['/**/*.jpg', '/**/*.jpeg', '/**/*.png']: image_files_list.extend(image_search(ext))
-        temp_folder = os.path.join(os.path.dirname(__file__),'tmp')
+        
+        print(f"Dataset path: {self._dataset_path}")
+        
+        # Use os.walk to find image files
+        for root, _, files in os.walk(self._dataset_path):
+            for file in files:
+                if any(file.endswith(ext) for ext in extensions):
+                    image_files_list.append(os.path.join(root, file))
+        
+        temp_folder = os.path.join(os.path.dirname(__file__), 'tmp')
         os.makedirs(temp_folder, exist_ok=True)
+        
+        print(f"Temp folder created at {temp_folder}")
+        print(f"Total images found: {len(image_files_list)}")
+        
         for filename in image_files_list[:num_imgs]:
-            image = cv2.imread(filename)
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            image = cv2.resize(image, (self._img_size[0], self._img_size[1]))
-            data = np.array(backend.normalize(image), dtype=np.float32)
-            data = np.expand_dims(data, 0)
-            bin_filename = os.path.basename(filename).split('.')[0]+'.bin'
-            with open(os.path.join(temp_folder, bin_filename), "wb") as f: 
-                data = np.transpose(data, [0, 3, 1, 2])
-                data.tofile(f)
+            try:
+                print(f"Processing image: {filename}")
+                image = cv2.imread(filename)
+                if image is None:
+                    print(f"Warning: Failed to read image {filename}")
+                    continue
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                image = cv2.resize(image, (self._img_size[0], self._img_size[1]))
+                data = np.array(backend.normalize(image), dtype=np.float32)
+                data = np.expand_dims(data, 0)
+                bin_filename = os.path.basename(filename).split('.')[0] + '.bin'
+                bin_path = os.path.join(temp_folder, bin_filename)
+                with open(bin_path, "wb") as f:
+                    data = np.transpose(data, [0, 3, 1, 2])
+                    data.tofile(f)
+                print(f"Saved binary file: {bin_path}")
+            except Exception as e:
+                print(f"Error processing image {filename}: {e}")
+        
+        print(f"Generated dataset in {temp_folder}")
         return temp_folder
+
+
+
 
     def convert_edgetpu(self, model_path):
         output_path = os.path.dirname(model_path)
@@ -121,8 +146,8 @@ class Converter(object):
 
     def convert_k210(self, model_path):
         folder_name = self.k210_dataset_gen()
-        output_name = os.path.basename(model_path).split(".")[0]+".kmodel"
-        output_path = os.path.join(os.path.dirname(model_path),output_name)
+        output_name = os.path.basename(model_path).split(".")[0] + ".kmodel"
+        output_path = os.path.join(os.path.dirname(model_path), output_name)
         print(output_path)
         cmd = '{} compile "{}" "{}" -i tflite --weights-quantize-threshold 1000 --dataset-format raw --dataset "{}"'.format(k210_converter_path, model_path, output_path, folder_name)
         print(cmd)
@@ -133,14 +158,14 @@ class Converter(object):
     def convert_ir(self, model_path, model_layers):
         input_model = os.path.join(model_path.split(".")[0], "saved_model.pb")
         output_dir = os.path.dirname(model_path)
-        output_layer = model_layers[-2].name+'/BiasAdd'
+        output_layer = model_layers[-2].name + '/BiasAdd'
         cmd = 'source /opt/intel/openvino/bin/setupvars.sh && python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model "{}" --output {} --batch 1 --reverse_input_channels --data_type FP16 --mean_values [127.5,127.5,127.5] --scale_values [127.5] --output_dir "{}"'.format(input_model, output_layer, output_dir)
         print(cmd)
         result = run_command(cmd)
         print(result)
 
     def convert_oak(self, model_path):
-        output_name = model_path.split(".")[0]+".blob"
+        output_name = model_path.split(".")[0] + ".blob"
         cmd = 'source /opt/intel/openvino/bin/setupvars.sh && /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/myriad_compile -m "{}" -o "{}" -ip U8 -VPU_MYRIAD_PLATFORM VPU_MYRIAD_2480 -VPU_NUMBER_OF_SHAVES 4 -VPU_NUMBER_OF_CMX_SLICES 4'.format(model_path.split(".")[0] + '.xml', output_name)
         print(cmd)
         result = run_command(cmd)
@@ -149,13 +174,13 @@ class Converter(object):
     def convert_onnx(self, model):
         spec = (tf.TensorSpec((None, *self._img_size, 3), tf.float32, name="input"),)
         output_path = self.model_path.split(".")[0] + '.onnx'
-        model_proto, external_tensor_storage = tf2onnx.convert.from_keras(model, input_signature=spec, output_path = output_path)
+        model_proto, external_tensor_storage = tf2onnx.convert.from_keras(model, input_signature=spec, output_path=output_path)
 
     def convert_tflite(self, model, model_layers, target=None):
         model_type = model.name
         model.summary()
 
-        if target=='k210': 
+        if target == 'k210':
             if model_type == 'yolo' or model_type == 'segnet':
                 print("Converting to tflite without Reshape for K210 YOLO")
                 if len(model.outputs) == 2:

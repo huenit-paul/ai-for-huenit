@@ -3,6 +3,7 @@
 import os
 import numpy as np
 from xml.etree.ElementTree import parse
+from lxml import etree
 
 
 def get_unique_labels(files):
@@ -172,6 +173,54 @@ class PascalVocXmlParser(object):
         tree = parse(fname)
         return tree
 
+class XmlParser_v2(object):
+    """Parse annotation for 1-annotation file"""
+
+    def __init__(self):
+        pass
+
+    def get_fname(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        return root.find("filename").text
+
+    def get_path(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        path = root.find("path")
+        return path.text if path is not None else None
+
+    def get_width(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        return int(root.find("size/width").text)
+
+    def get_height(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        return int(root.find("size/height").text)
+
+    def get_labels(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        labels = []
+        for obj in root.findall("object"):
+            labels.append(obj.find("name").text)
+        return labels
+
+    def get_boxes(self, annotation_file):
+        root = self._root_tag(annotation_file)
+        bbs = []
+        for obj in root.findall("object"):
+            bbox = obj.find("bndbox")
+            x1 = int(float(bbox.find("xmin").text))
+            y1 = int(float(bbox.find("ymin").text))
+            x2 = int(float(bbox.find("xmax").text))
+            y2 = int(float(bbox.find("ymax").text))
+            bbs.append([x1, y1, x2, y2])
+        return np.array(bbs)
+
+    def _root_tag(self, fname):
+        with open(fname, 'rb') as f:
+            tree = etree.parse(f)
+        return tree.getroot()
+
+
 def parse_annotation(ann_dir, img_dir, labels_naming=[], is_only_detect=False):
     """
     # Args
@@ -182,7 +231,8 @@ def parse_annotation(ann_dir, img_dir, labels_naming=[], is_only_detect=False):
     # Returns
         all_imgs : list of dict
     """
-    parser = PascalVocXmlParser()
+    # parser = PascalVocXmlParser()
+    parser = XmlParser_v2()
 
     if is_only_detect:
         annotations = Annotations(["object"])
