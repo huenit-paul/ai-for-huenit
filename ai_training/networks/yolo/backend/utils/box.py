@@ -83,7 +83,7 @@ def draw_scaled_boxes(image, boxes, probs, labels, desired_size=400):
     img_scaled = cv2.resize(image, (int(w*scale_factor), int(h*scale_factor)))
     if boxes != []:
         boxes_scaled = boxes*scale_factor
-        boxes_scaled = boxes_scaled.astype(np.int)
+        boxes_scaled = boxes_scaled.astype(np.int32)
     else:
         boxes_scaled = boxes
     return draw_boxes(img_scaled, boxes_scaled, probs, labels)
